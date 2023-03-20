@@ -4,10 +4,10 @@ const path = require('path');
 const homeRouter = require('./routes/home');
 const userRouter = require('./routes/user');
 const productRouter = require('./routes/product');
+const adminProductsRouter = require('./routes/admin/ProductsRouter');
 const session = require('express-session')
 
 //Variáveis
-
 const app = express();
 const port = 3000;
 
@@ -20,7 +20,7 @@ app.use(express.static(path.resolve('src', 'public')));
 app.use(express.urlencoded({ extended: false }))
 
 app.use(session({
-  secret: 'raphael-secret',
+  secret: 'stay-pop-secret',
   resave: true,
   saveUninitialized: false
 }))
@@ -29,6 +29,7 @@ app.use(session({
 app.use(homeRouter);
 app.use(userRouter);
 app.use(productRouter);
+app.use(adminProductsRouter);
 
 app.listen(port, () => console.log(`Servidor funcionando na porta ${port}`));
 

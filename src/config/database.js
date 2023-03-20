@@ -8,7 +8,7 @@ const config = {
         host: 'localhost',
         dialect: 'mysql'
     }
-} 
+}
 
 module.exports = config
 
