@@ -1,5 +1,7 @@
 /* aqui se criam as funções para cada página que será acessada, elas puxam a view .ejs */
  /* o res.render() irá puxar o arquivo .ejs da página requisitada */
+const {User} = require('../models')
+const bcrypt = require('bcryptjs')
 
 const HomeController = {
     showHomePage: (req, res) => {
@@ -18,6 +20,27 @@ const HomeController = {
         return res.render('login');
     },
 
+    processLogin: async (req, res) => {
+        const {email, password} = req.body;
+
+        if(!email || !password) return res.redirect('/login');
+
+        const user = await User.findOne({
+            where: {
+                email: email,
+            },
+        });
+
+        if(!user || !bcrypt.compareSync(password, user.password)) return res.redirect("/login");
+
+        req.session.user = {
+            name: user.email,
+            isAdmin: user.isAdmin,
+        }
+
+        return res.redirect("/")
+    },
+
     showProductPage: (req, res) => {
         return res.render('product');
     },
@@ -29,8 +52,6 @@ const HomeController = {
     showListaDeProdutosPage: (req, res) => {
         return res.render('lista-de-produtos');
     },
-
-
 }
 
 

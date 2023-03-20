@@ -14,9 +14,26 @@ module.exports = {
           type: Sequelize.STRING(100),
           allowNull: false,
         },
+        email: {
+          type: Sequelize.STRING(250),
+          allowNull: false,
+          unique: true,
+        },
+        password: {
+          type: Sequelize.STRING(500),
+          allowNull: false,
+        }, 
+        is_admin: {
+          type: Sequelize.TINYINT,
+          defaultValue: false,
+        },
         created_at: {
           type: Sequelize.DATE,
           allowNull: false,
+          defaultValue: Sequelize.NOW
+        },
+        updated_at: {
+          type: Sequelize.DATE,
           defaultValue: Sequelize.NOW
         }
       }

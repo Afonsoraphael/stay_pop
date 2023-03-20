@@ -2,7 +2,9 @@
 const express = require('express');
 const path = require('path');
 const homeRouter = require('./routes/home');
-
+const userRouter = require('./routes/user');
+const productRouter = require('./routes/product');
+const session = require('express-session')
 
 //Variáveis
 
@@ -15,11 +17,18 @@ app.set('view engine', 'ejs');
 app.set('views', path.resolve('src', 'views'));
 app.use(express.json());
 app.use(express.static(path.resolve('src', 'public')));
+app.use(express.urlencoded({ extended: false }))
 
-
+app.use(session({
+  secret: 'raphael-secret',
+  resave: true,
+  saveUninitialized: false
+}))
 
 //Rotas
 app.use(homeRouter);
+app.use(userRouter);
+app.use(productRouter);
 
 app.listen(port, () => console.log(`Servidor funcionando na porta ${port}`));
 
