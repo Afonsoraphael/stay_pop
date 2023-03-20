@@ -9,7 +9,7 @@ const session = require('express-session')
 
 //Variáveis
 const app = express();
-const port = 3000;
+const port = 3000
 
 
 //Configurações / Middlewares
