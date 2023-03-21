@@ -5,6 +5,7 @@ const homeRouter = require('./routes/home');
 const userRouter = require('./routes/user');
 const productRouter = require('./routes/product');
 const adminProductsRouter = require('./routes/admin/ProductsRouter');
+const orderRouter = require('./routes/order');
 const session = require('express-session')
 
 //Variáveis
@@ -29,6 +30,7 @@ app.use(session({
 app.use(homeRouter);
 app.use(userRouter);
 app.use(productRouter);
+app.use(orderRouter);
 app.use(adminProductsRouter);
 
 app.listen(port, () => console.log(`Servidor funcionando na porta ${port}`));

@@ -6,7 +6,8 @@ const config = {
         password: process.env.DB_PASSWORD,
         database: 'stay_pop',
         host: 'localhost',
-        dialect: 'mysql'
+        dialect: 'mysql',
+        port: 3306,
     }
 }
 

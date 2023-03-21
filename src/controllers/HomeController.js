@@ -34,6 +34,7 @@ const HomeController = {
         if(!user || !bcrypt.compareSync(password, user.password)) return res.redirect("/login");
 
         req.session.user = {
+            id: user.id,
             name: user.email,
             isAdmin: user.isAdmin,
         }
