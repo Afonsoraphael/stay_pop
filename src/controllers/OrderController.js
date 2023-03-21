@@ -21,22 +21,22 @@ const OrderController = {
   AddToCart: async (req, res) => {
     const { id } = req.params;
     const { cart } = req.session;
+    
     if(cart) {
-        const product = cart.find((product) => product.id === id)
-        console.log(product)
-        if(!product){ 
-          cart.push({id, quantity: 1})
+        const productInCart = cart.find((product) => product.id === id)
+        
+        if(!productInCart){ 
+          cart.push({id, quantity: 1});
         } else {
-          const index = cart.indexOf(product)
-          cart[index] = {id, quantity: product.quantity + 1};
+          const index = cart.indexOf(productInCart)
+          cart[index] = {id, quantity: productInCart.quantity + 1};
         }
         req.session.cart = cart;
     } else {
       req.session.cart = [{id: id, quantity: 1}]
     }
-    console.log(req.session.cart)
-    return res.json({success: `added ${id} to cart`});
-    // return res.redirect('/usuario/carrinho')
+    // return res.json({success: `added ${id} to cart`});
+    return res.redirect('/usuario/carrinho')
   },
 
   ShowCart: async (req, res) => {
