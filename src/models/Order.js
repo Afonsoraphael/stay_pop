@@ -20,5 +20,13 @@ module.exports = (sequelize, dataTypes) => {
     }
   }, {tableName: 'orders', timestamps: false })
 
+  // Order.associate = (models) => {
+  //   Order.belongsTo(models.User, {
+  //     foreignKey: "userId",
+  //     as: "user",
+
+  //   })
+  // }
+
   return Order
 }
