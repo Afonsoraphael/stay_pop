@@ -24,6 +24,10 @@ module.exports = {
         type: Sequelize.STRING(700),
         allowNull: false,
         primaryKey: true,
+      },
+      quantity: {
+        type: Sequelize.INTEGER(10),
+        allowNull: false,
       }
     });
   },

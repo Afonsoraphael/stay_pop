@@ -17,6 +17,10 @@ module.exports = (sequelize, dataTypes) => {
         allowNull: false,
         primaryKey: true,
         field: 'order_number'
+    },
+    quantity: {
+      type: dataTypes.INTEGER(10),
+      allowNull: false,
     }
   }, {tableName: 'orders', timestamps: false })
 
