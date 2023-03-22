@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator')
-const { Location } = require('../models')
+const { Location, UserHasLocation } = require('../models')
 
 const LocationController = {
   Create: async (req, res) => {
@@ -8,6 +8,8 @@ const LocationController = {
     if(!errors.isEmpty()) {
       return res.status(404).json(errors);
     }
+    
+    const userId = req.session.user.id;
 
     const locationToCreate = {
       addressLine, 
@@ -17,12 +19,16 @@ const LocationController = {
       country
     } = req.body;
 
-    try {
-      const locationCreated = await Location.create(locationToCreate);
-      return res.status(201).json(locationCreated);
-    } catch (error) {
+    const locationCreated = await Location.create(locationToCreate).catch((error) => {
       return res.status(500).json({error: error.message});
-    }
+    })
+  
+    await UserHasLocation.create({
+      userId,
+      locationId: locationCreated.id,
+    })
+
+    return res.status(201).json(locationCreated)
   }
 }
 

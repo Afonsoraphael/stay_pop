@@ -4,9 +4,9 @@ const { validationResult } = require('express-validator')
 
 const UserController = {
   Get: async (req, res) => {
-    const id = req.params.id
+    const id = req.params.id;
 
-    if(id !== req.session.user.id) {
+    if(Number(id) !== req.session.user.id) {
       return res.status(401).json({ error: 'Page not found' })
     }
 
@@ -14,15 +14,16 @@ const UserController = {
       include: [
         {
           association: 'locations'
-        }
-      ]
-    }).toJSON()
+        },
+      ],
+      attributes: {
+        exclude: ['password']
+      }
+    }, {raw: true})
 
     if(!user) {
       return res.status(404).json({ error: 'User not found' })
     }
-
-    delete user.password
     
     return res.json(user)
   },

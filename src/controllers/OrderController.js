@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
 const { uuid } = require('uuidv4');
-const { Order, Product, UserHasOrder, sequelize } = require('../models')
+const { Order, Product, UserHasOrder, sequelize, Location } = require('../models')
 
 const OrderController = {
   Create: async (req, res) => {
@@ -9,16 +9,31 @@ const OrderController = {
     if(!errors.isEmpty()) {
       return res.status(404).json(errors)
     }
-
+    
     const transaction = await sequelize.transaction();
 
     const orderNumber = uuid();
     const cart = req.session.cart;
     const userId = req.session.user.id;
-    const locationId = req.body.locationId;
-    
+    let locationId = req.body.locationId;
+
     if(!cart) {
       return res.status(404).json({error: 'Cart empty'})
+    }
+    
+    if(!locationId) {
+      const locations = await Location.findAll({
+        include: [
+          {
+            association: 'users',
+            where: {
+              id: req.session.user.id
+            },
+            required: true
+          }
+        ]
+      })
+      locationId = locations[0].id;
     }
 
     const ids = cart.map((product) => product.id)
@@ -124,21 +139,10 @@ const OrderController = {
     const userId = req.session.user.id;
     const orderNumber = req.query.orderNumber;
 
-    if (orderNumber){
-      const orders = await Order.findAll({
-        where: {
-          orderNumber
-        },
-        include: 'product'
-      })
-
-      return res.json(orders);
-    }
+    const whereCondition = orderNumber ? { userId, orderNumber } : { userId };
 
     const userHasOrders = await UserHasOrder.findAll({
-      where: {
-        userId
-      },
+      where: whereCondition,
       include: [
         {
           association: 'location'
@@ -154,18 +158,37 @@ const OrderController = {
       where: {
         orderNumber: [...orderNumbers]
       },
+      include: [
+        {
+          association: 'product'
+        }
+      ]
     })
 
     const ordersFormatted = userHasOrders.map(userHasOrder => {
-      const order = orders.find((order) => order.orderNumber === userHasOrder.orderNumber)
-      return {
+      const orderFiltered = orders.map((order) => {
+        if(order.orderNumber === userHasOrder.orderNumber) {
+          return {
+            quantity: order.quantity,
+            name: order.product.name,
+            price: order.product.price,
+            description: order.product.description,
+            category: order.product.category,
+            img: order.product.img,
+          }
+        }
+      })
+      
+      const orderFormatted = {
         ...userHasOrder.toJSON(),
+        products: orderFiltered,
         orderNumber: userHasOrder.orderNumber,
         totalPrice:  userHasOrder.totalPrice,
         totalProduct: userHasOrder.totalProduct,
         estimateDate: userHasOrder.estimateDate,
-        ...order.toJSON(),
       }
+
+      return orderFormatted;
     })
 
     return res.status(200).json(ordersFormatted)
