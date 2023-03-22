@@ -45,5 +45,14 @@ module.exports = (sequelize, dataTypes) => {
         paranoid: true 
     })
 
+    User.associate = (models) => {
+        User.belongsToMany(models.Location, {
+            through: models.UserHasLocation,
+            foreignKey: 'userId',
+            otherKey: 'locationId',
+            as: 'locations'
+        })
+    }
+
     return User
 }

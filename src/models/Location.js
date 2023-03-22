@@ -33,5 +33,14 @@ module.exports = (Sequelize, dataTypes) => {
     timestamps: false,
   })
 
+  Location.associate = (models) => {
+    Location.belongsToMany(models.User, {
+        through: models.UserHasLocation,
+        foreignKey: 'locationId',
+        otherKey: 'userId',
+        as: 'users'
+    })
+}
+
   return Location
 }
