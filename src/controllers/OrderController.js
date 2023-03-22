@@ -1,8 +1,15 @@
+const { validationResult } = require('express-validator');
 const { uuid } = require('uuidv4');
 const { Order, Product, UserHasOrder, sequelize } = require('../models')
 
 const OrderController = {
   Create: async (req, res) => {
+    const errors = validationResult(req)
+
+    if(!errors.isEmpty()) {
+      return res.status(404).json(errors)
+    }
+
     const transaction = await sequelize.transaction();
 
     const orderNumber = uuid();
