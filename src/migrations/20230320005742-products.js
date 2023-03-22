@@ -30,6 +30,11 @@ module.exports = {
         type: Sequelize.STRING(1000),
         allowNull: true
       },
+      valid: {
+        type: Sequelize.TINYINT(1),
+        defaultValue: 1,
+        allowNull: false,
+      },
       created_at: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
@@ -38,6 +43,10 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
       },
+      deletedAt: {
+        type: Sequelize.DATE,
+        allowNull: true
+      }
     });
   },
 

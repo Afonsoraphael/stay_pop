@@ -26,6 +26,10 @@ module.exports = (Sequelize, dataTypes) => {
       type: dataTypes.STRING(1000),
       allowNull: true
     },
+    valid: {
+      type: dataTypes.TINYINT,
+      defaultValue: 1,
+    },
     createdAt: {
       type: dataTypes.DATE,
       allowNull: false,
@@ -35,8 +39,18 @@ module.exports = (Sequelize, dataTypes) => {
       type: dataTypes.DATE,
       allowNull: false,
       field: 'updated_at',
-  }
-  }, {tableName: 'products', underscored: true, timestamps: true })
+    },
+    deletedAt: {
+      type: dataTypes.DATE,
+      allowNull: false,
+      field: 'deleted_at',
+    },
+  }, {
+    tableName: 'products', 
+    underscored: true, 
+    timestamps: true, 
+    paranoid: true 
+  })
 
   return Product;
 }

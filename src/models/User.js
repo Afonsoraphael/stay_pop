@@ -32,8 +32,18 @@ module.exports = (sequelize, dataTypes) => {
             type: dataTypes.DATE,
             allowNull: false,
             field: 'updated_at',
-        }
-    }, {tableName: 'users', underscored: true, timestamps: true })
+        },
+        deletedAt: {
+            type: dataTypes.DATE,
+            allowNull: true,
+            field: 'deleted_at',
+          }
+    }, {
+        tableName: 'users', 
+        underscored: true, 
+        timestamps: true, 
+        paranoid: true 
+    })
 
     return User
 }
