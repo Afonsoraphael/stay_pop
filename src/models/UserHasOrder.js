@@ -38,6 +38,13 @@ module.exports = (Sequelize, dataTypes) => {
     timestamps: false,
   })
 
+  UserHasOrder.associate = (models) => {
+    UserHasOrder.belongsTo(models.Location, {
+      foreignKey: 'locationId',
+      as: 'location'
+    })
+  }
+
   UserHasOrder.removeAttribute('id')
 
   return UserHasOrder

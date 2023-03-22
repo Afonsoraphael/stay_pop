@@ -115,25 +115,53 @@ const OrderController = {
 
   Orders: async (req, res) => {
     const userId = req.session.user.id;
-    const { orderNumber = null } = req.query;
+    const orderNumber = req.query.orderNumber;
 
-    const filter = orderNumber ? { userId, orderNumber } : { userId }
-    
-    const products = await Order.findAll({
-      where: filter,
+    if (orderNumber){
+      const orders = await Order.findAll({
+        where: {
+          orderNumber
+        },
+        include: 'product'
+      })
+
+      return res.json(orders);
+    }
+
+    const userHasOrders = await UserHasOrder.findAll({
+      where: {
+        userId
+      },
       include: [
-        { association: "user", attributes: ['name'] },
-        { association: "product"},
-      ],
-      // attributes: [
-      //   "quantity",
-      //   "orderNumber",
-      //   // [Sequelize.fn('count', Sequelize.col('quantity')), 'count']
-      // ],
-      group: "orderNumber"
+        {
+          association: 'location'
+        }
+      ]
+    })
+   
+    const orderNumbers = userHasOrders.map(order => {
+      return order.orderNumber;
+    })
+    
+    const orders = await Order.findAll({
+      where: {
+        orderNumber: [...orderNumbers]
+      },
     })
 
-    return res.json(products);
+    const ordersFormatted = userHasOrders.map(userHasOrder => {
+      const order = orders.find((order) => order.orderNumber === userHasOrder.orderNumber)
+      return {
+        ...userHasOrder.toJSON(),
+        orderNumber: userHasOrder.orderNumber,
+        totalPrice:  userHasOrder.totalPrice,
+        totalProduct: userHasOrder.totalProduct,
+        estimateDate: userHasOrder.estimateDate,
+        ...order.toJSON(),
+      }
+    })
+
+    return res.status(200).json(ordersFormatted)
   }
 }
 
