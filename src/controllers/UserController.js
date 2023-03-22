@@ -3,6 +3,30 @@ const { User, Op } = require('../models')
 const { validationResult } = require('express-validator')
 
 const UserController = {
+  Get: async (req, res) => {
+    const id = req.params.id
+
+    if(id !== req.session.user.id) {
+      return res.status(401).json({ error: 'Page not found' })
+    }
+
+    const user = await User.findByPk(id, {
+      include: [
+        {
+          association: 'locations'
+        }
+      ]
+    }).toJSON()
+
+    if(!user) {
+      return res.status(404).json({ error: 'User not found' })
+    }
+
+    delete user.password
+    
+    return res.json(user)
+  },
+
   Create: async (req, res) => {
     const errors = validationResult(req)
     
