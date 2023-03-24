@@ -6,6 +6,7 @@ const userRouter = require('./routes/user');
 const productRouter = require('./routes/product');
 const adminProductsRouter = require('./routes/admin/ProductsRouter');
 const orderRouter = require('./routes/order');
+const locationRouter = require('./routes/location');
 const session = require('express-session')
 
 //Variáveis
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(express.static(path.resolve('src', 'public')));
 app.use(express.urlencoded({ extended: false }))
 
+//Session
 app.use(session({
   secret: 'stay-pop-secret',
   resave: true,
@@ -28,11 +30,13 @@ app.use(session({
 
 //Rotas
 app.use(homeRouter);
+app.use(locationRouter);
 app.use(userRouter);
 app.use(productRouter);
 app.use(orderRouter);
 app.use(adminProductsRouter);
 
+//Listening
 app.listen(port, () => console.log(`Servidor funcionando na porta ${port}`));
 
 //npm run dev -> nodemon | npm start -> node

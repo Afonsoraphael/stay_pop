@@ -32,17 +32,27 @@ module.exports = (sequelize, dataTypes) => {
             type: dataTypes.DATE,
             allowNull: false,
             field: 'updated_at',
-        }
-    }, {tableName: 'users', underscored: true, timestamps: true })
+        },
+        deletedAt: {
+            type: dataTypes.DATE,
+            allowNull: true,
+            field: 'deleted_at',
+          }
+    }, {
+        tableName: 'users', 
+        underscored: true, 
+        timestamps: true, 
+        paranoid: true 
+    })
 
     User.associate = (models) => {
-        User.belongsToMany(models.Product, {
-            as: 'products',
+        User.belongsToMany(models.Location, {
+            through: models.UserHasLocation,
             foreignKey: 'userId',
-            otherKey: 'productId',
-            through: models.Order
+            otherKey: 'locationId',
+            as: 'locations'
         })
-      }
+    }
 
     return User
 }

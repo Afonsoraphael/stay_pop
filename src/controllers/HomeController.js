@@ -31,7 +31,10 @@ const HomeController = {
             },
         });
 
-        if(!user || !bcrypt.compareSync(password, user.password)) return res.redirect("/login");
+        if(!user || !bcrypt.compareSync(password, user.password)) {
+            return res.status(401).json({error: 'Invalid credentials'});
+            // return res.redirect("/login");
+        }
 
         req.session.user = {
             id: user.id,
@@ -39,7 +42,8 @@ const HomeController = {
             isAdmin: user.isAdmin,
         }
 
-        return res.redirect("/")
+        return res.status(200).json({success: true});
+        // return res.redirect("/")
     },
 
     showProductPage: (req, res) => {

@@ -26,6 +26,10 @@ module.exports = (Sequelize, dataTypes) => {
       type: dataTypes.STRING(1000),
       allowNull: true
     },
+    valid: {
+      type: dataTypes.TINYINT,
+      defaultValue: 1,
+    },
     createdAt: {
       type: dataTypes.DATE,
       allowNull: false,
@@ -35,17 +39,18 @@ module.exports = (Sequelize, dataTypes) => {
       type: dataTypes.DATE,
       allowNull: false,
       field: 'updated_at',
-  }
-  }, {tableName: 'products', underscored: true, timestamps: true })
-
-  Product.associate = (models) => {
-    Product.belongsToMany(models.User, {
-      as: "user",
-      foreignKey: "productId",
-      otherKey: "userId",
-      through: models.Order
-    })
-  }
+    },
+    deletedAt: {
+      type: dataTypes.DATE,
+      allowNull: true,
+      field: 'deleted_at',
+    },
+  }, {
+    tableName: 'products', 
+    underscored: true, 
+    timestamps: true, 
+    paranoid: true 
+  })
 
   return Product;
 }
