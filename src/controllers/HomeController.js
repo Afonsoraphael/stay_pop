@@ -33,14 +33,6 @@ const HomeController = {
     }
   },
 
-  showCarrinho: async (req, res) => {
-    return res.render("carrinho");
-  },
-
-  showFinalizePedido: (req, res) => {
-    return res.render("finalize-seu-pedido");
-  },
-
   showLogin: (req, res) => {
     return res.render("login");
   },
@@ -57,7 +49,6 @@ const HomeController = {
     });
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
-      // return res.status(401).json({error: 'Invalid credentials'});
       return res.redirect("/login");
     }
 
@@ -67,20 +58,7 @@ const HomeController = {
       isAdmin: user.isAdmin,
     };
 
-    // return res.status(200).json({success: true});
     return res.redirect("/");
-  },
-
-  showProductPage: (req, res) => {
-    return res.render("product");
-  },
-
-  showPedidoRealizado: (req, res) => {
-    return res.render("pedido-realizado");
-  },
-
-  showListaDeProdutosPage: (req, res) => {
-    return res.render("lista-de-produtos");
   },
 };
 

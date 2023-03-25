@@ -97,11 +97,9 @@ const OrderController = {
       });
       await transaction.commit();
       return res.redirect("/usuario/pedidos");
-      // return res.status(201).json({ success: true, message: 'Order created successfully' })
     } catch (error) {
       await transaction.rollback();
       return res.redirect("/");
-      // return res.json({ error: error.message })
     }
   },
 

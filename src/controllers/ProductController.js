@@ -17,7 +17,6 @@ const ProductController = {
       }
 
       return res.render("lista-de-produtos", { products });
-      // return res.status(200).json(products)
     } catch (error) {
       console.log(error);
       return res.status(500).redirect("/");
