@@ -1,32 +1,43 @@
-const { Product } = require('../models')
+const { Product } = require("../models");
 
 const ProductController = {
   List: async (req, res) => {
-    const { category } = req.query;
-    let products;
-    
-    if(category) {
-      products = await Product.findAll({
-        where: {
-          category
-        }
-      })
-    } else {
-      products = await Product.findAll();
-    }
+    try {
+      const { category } = req.query;
+      let products;
 
-    return res.status(200).json(products)
+      if (category) {
+        products = await Product.findAll({
+          where: {
+            category,
+          },
+        });
+      } else {
+        products = await Product.findAll();
+      }
+
+      return res.render("lista-de-produtos", { products });
+      // return res.status(200).json(products)
+    } catch (error) {
+      console.log(error);
+      return res.status(500).redirect("/");
+    }
   },
 
   Get: async (req, res) => {
-    const { id } = req.params
+    try {
+      const { id } = req.params;
 
-    const product = await Product.findByPk(id);
+      const product = await Product.findByPk(id);
 
-    if(!product) return res.status(404).json({error: 'Product not found'})
+      if (!product) return res.status(404).json({ error: "Product not found" });
 
-    return res.json(product)
-  }
-}
+      return res.json(product);
+    } catch (error) {
+      console.log(error);
+      return res.redirect('/')
+    }
+  },
+};
 
-module.exports = ProductController
+module.exports = ProductController;

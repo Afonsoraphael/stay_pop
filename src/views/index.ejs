@@ -18,7 +18,7 @@
 </head>
 <body>
     
-    <%- include ('') %>
+    <%- include ('./header.ejs') %>
 
     <div class="menu-mobile">
         <section>
@@ -80,17 +80,11 @@
         <section class="banner">
             <div class="glider-contain">
                 <div class="glider">
-                  <div>
-                    <img src="https://www.ubuy.com.br/productimg/?image=aHR0cHM6Ly9pNS53YWxtYXJ0aW1hZ2VzLmNvbS9hc3IvOWRmMTVkMWQtZDc3Mi00YjIzLWJjZjktYTBlMzM2ZWVkZWI2LmZmYjVmZDIzYjk4YzJlZTk5NThlZWMxYTlhOWM0MmQzLnBuZw.jpg" alt=""> 
-                  </div>
-
-                  <div>
-                    <img src="https://img.irroba.com.br/fit-in/600x600/filters:fill(transparent):quality(95)/helpfull/catalog/moletom-zero-two-1.png" alt="">
-                  </div>
-
-                  <div>
-                    <img src="https://bugueishop.com.br/wp-content/uploads/2023/01/Front-43-6-370x492.png" alt="">
-                  </div>
+                    <% categories.forEach((category) => { %>
+                        <div>
+                          <img src=<%= productsOrderBy[category][0].img %> alt=""> 
+                        </div>
+                    <% }) %>
                 </div>
               
                 <button aria-label="Previous" class="glider-prev">«</button>
@@ -100,59 +94,19 @@
         </section>
 
         <section class="products">
-            <article class="card-product">
-                <img src="/img/camisa.png" alt="">
-                <div>
-                    <span>Camiseta Dracarys</span>
-                    <h3>R$ 59,00</h3>
-                </div>
-                <button>Comprar</button>
-            </article>
+            <% products.forEach((product) => { %>
+                <article class="card-product">
 
-            <article class="card-product">
-                <img src="/img/camisa2.png" alt="">
-                <div>
-                    <span>Camiseta IT</span>
-                    <h3>R$ 59,00</h3>
-                </div>
-                <button>Comprar</button>
-            </article>
-
-            <article class="card-product">
-                <img src="/img/blusa.png" alt="">
-                <div>
-                    <span>Camiseta Berserk</span>
-                    <h3>R$ 59,00</h3>
-                </div>
-                <button>Comprar</button>
-            </article>
-
-            <article class="card-product">
-                <img src="/img/hp1.png" alt="">
-                <div>
-                    <span>Moletom Zero Two</span>
-                    <h3>R$ 109,00</h3>
-                </div>
-                <button>Comprar</button>
-            </article>
-
-            <article class="card-product">
-                <img src="/img/FunkoPopWednesday.png" alt="">
-                <div>
-                    <span>Funko- Wandinha</span>
-                    <h3>R$ 99,00</h3>
-                </div>
-                <button>Comprar</button>
-            </article>
-
-            <article class="card-product">
-                <img src="/img/FunkoPopAvatarNeytiri.png" alt="">
-                <div>
-                    <span>Funko Neytiri</span>
-                    <h3>R$ 99,00</h3>
-                </div>
-                <button>Comprar</button>
-            </article>
+                    <img src=<%= product.img %> alt="">
+                    <div>
+                        <span><%= product.name %></span>
+                        <h3><%= product.price  %></h3>
+                    </div>
+                    <form action="/usuario/carrinho/add/<%= product.id %>">
+                        <button type='submit'>Comprar</button>
+                    </form>
+                </article>
+            <% }) %>
         </section>
     </main>
         <%- include('./footer.ejs') %>
