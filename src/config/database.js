@@ -8,6 +8,8 @@ const config = {
         host: 'localhost',
         dialect: 'mysql',
         port: 3306,
+        seederStorage: "sequelize",
+        seederStorageTableName: "sequelize_data"
     }
 }
 
