@@ -18,7 +18,7 @@ const HomeController = {
 
       const productsOrderBy = {};
 
-      categories.forEach(async (category, index) => {
+      categories.forEach((category) => {
         productsOrderBy[category] = new Array();
         const productsInCategory = products.find(
           (product) => product.category === category
