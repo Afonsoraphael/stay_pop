@@ -1,10 +1,17 @@
 const { Product } = require('../../models')
+const { validationResult } = require('express-validator');
 
 const AdminProductsController = {
   ShowCreate: async (req, res) => {
     return res.render("TelaDeCriacaoDeProduto.ejs")
   },
   Create: async (req, res) => {
+    const errors = validationResult(req)
+
+    if(!errors.isEmpty()) {
+      return res.redirect('/admin/produtos')
+    }
+
     const {
       name,
       price, 
@@ -13,11 +20,6 @@ const AdminProductsController = {
       img,
     } = req.body
     
-    if (!name || !price || !description || !category) {
-      // return res.status(404).redirect('/admin/produtos');
-      return res.json({error: 'Invalid fields!'})
-    }
-
     const productCreated = await Product.create({
       name,
       price, 
